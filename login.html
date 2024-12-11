@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Авторизация <i class="fas fa-sign-in-alt"></i></h2>
+        <form id="loginForm">
+            <label for="login">Логин:</label>
+            <input type="text" id="login" name="login" required>
+            <div id="loginError" class="error-message"></div>
+
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+            <div id="passwordError" class="error-message"></div>
+
+            <button type="submit">Войти <i class="fas fa-arrow-right"></i></button>
+        </form>
+        <div class="alert alert-danger" id="loginMessage" style="display: none;"></div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const login = document.getElementById('login').value;
+            const password = document.getElementById('password').value;
+
+            const loginRegex = /^[A-Za-z0-9]{3,}$/;
+            const passwordRegex = /^.{6,}$/;
+
+            let isValid = true;
+
+            // Очистка предыдущих сообщений об ошибках
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+            document.getElementById('loginMessage').style.display = 'none';
+
+            if (!loginRegex.test(login)) {
+                isValid = false;
+                document.getElementById('loginError').textContent = 'Логин должен содержать минимум 3 символа';
+            }
+
+            if (!passwordRegex.test(password)) {
+                isValid = false;
+                document.getElementById('passwordError').textContent = 'Пароль должен содержать минимум 6 символов';
+            }
+
+            if (!isValid) {
+                return;
+            }
+
+            document.getElementById('loginMessage').textContent = 'База данных не подключена';
+            document.getElementById('loginMessage').style.display = 'block';
+        });
+    </script>
+</body>
+</html>

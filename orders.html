@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои заказы</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container container-large">
+        <h2>Мои заказы <i class="fas fa-list"></i></h2>
+        <table id="ordersTable">
+            <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th>Количество</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody id="ordersList">
+            </tbody>
+        </table>
+        <button onclick="window.location.href='new_order.html'">Создать новый заказ <i class="fas fa-plus"></i></button>
+    </div>
+
+    <script>
+        const orders = [
+            { product: 'Товар 1', quantity: 2, status: 'Новое' },
+            { product: 'Товар 2', quantity: 1, status: 'Подтверждено' }
+        ];
+
+        function displayOrders() {
+            const ordersList = document.getElementById('ordersList');
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.product}</td>
+                    <td>${order.quantity}</td>
+                    <td class="badge badge-${getStatusClass(order.status).toLowerCase()}">${order.status}</td>
+                `;
+                ordersList.appendChild(row);
+            });
+        }
+
+        function getStatusClass(status) {
+            switch (status) {
+                case 'Новое':
+                    return 'new';
+                case 'Подтверждено':
+                    return 'confirmed';
+                case 'Отменено':
+                    return 'cancelled';
+                default:
+                    return '';
+            }
+        }
+
+        displayOrders();
+    </script>
+</body>
+</html>

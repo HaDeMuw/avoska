@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель администратора</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container container-xlarge">
+        <h2>Панель администратора <i class="fas fa-key"></i></h2> <!-- Изменили иконку на ключ -->
+        <table id="adminOrdersTable">
+            <thead>
+                <tr>
+                    <th>ФИО</th>
+                    <th>Email</th>
+                    <th>Товар</th>
+                    <th>Количество</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody id="adminOrdersList">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const adminOrders = [
+            { userFIO: 'Иван Иванов', userEmail: 'ivan@example.com', product: 'Товар 1', quantity: 2, status: 'Новое' },
+            { userFIO: 'Петр Петров', userEmail: 'petr@example.com', product: 'Товар 2', quantity: 1, status: 'Подтверждено' }
+        ];
+
+        function displayAdminOrders() {
+            const adminOrdersList = document.getElementById('adminOrdersList');
+            adminOrdersList.innerHTML = ''; // Очистка таблицы перед отображением
+            adminOrders.forEach((order, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.userFIO}</td>
+                    <td>${order.userEmail}</td>
+                    <td>${order.product}</td>
+                    <td>${order.quantity}</td>
+                    <td>
+                        <div class="input-group">
+                            <span class="badge badge-${getStatusClass(order.status)}" id="statusBadge-${index}">${order.status}</span>
+                            <select onchange="changeStatus(${index}, this.value)" class="custom-select custom-select-sm" id="statusSelect-${index}">
+                                <option value="Новое" ${order.status === 'Новое' ? 'selected' : ''}>Новое</option>
+                                <option value="Подтверждено" ${order.status === 'Подтверждено' ? 'selected' : ''}>Подтверждено</option>
+                                <option value="Отменено" ${order.status === 'Отменено' ? 'selected' : ''}>Отменено</option>
+                            </select>
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-sm btn-primary" onclick="updateStatus(${index})"><i class="fas fa-wrench"></i></button> <!-- Изменили иконку на молоточек -->
+                            </div>
+                        </div>
+                    </td>
+                `;
+                adminOrdersList.appendChild(row);
+            });
+        }
+
+        function getStatusClass(status) {
+            switch (status) {
+                case 'Новое':
+                    return 'primary';
+                case 'Подтверждено':
+                    return 'success';
+                case 'Отменено':
+                    return 'danger';
+                default:
+                    return '';
+            }
+        }
+
+        function changeStatus(index, newStatus) {
+            adminOrders[index].status = newStatus;
+        }
+
+        function updateStatus(index) {
+            const selectElement = document.getElementById(`statusSelect-${index}`);
+            const newStatus = selectElement.value;
+            const badgeElement = document.getElementById(`statusBadge-${index}`);
+
+            adminOrders[index].status = newStatus;
+            badgeElement.textContent = newStatus;
+            badgeElement.className = `badge badge-${getStatusClass(newStatus)}`;
+
+            alert('Статус заказа изменен');
+        }
+
+        displayAdminOrders();
+    </script>
+</body>
+</html>
